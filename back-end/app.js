@@ -58,37 +58,39 @@ app.get("/tasks/:id", async (req, res) => {
     console.log(error);
   }
 });
-app.post("/tasks", async (req, res) => {  
+app.post("/tasks", async (req, res) => {
   let newTask;
   let tasks = await Task.find();
   let taskId;
   const schema = Joi.object({
-    name:Joi.string().min(3).max(100).lowercase().alphanum(),
+    name: Joi.string().min(3).max(100).lowercase().alphanum(),
   });
-  const {value,error} = schema.validate(req.body);
- if (error) {
-  res.status(400).send(error.details[0].message);
-  return;
- }
- if (!error) {
-  if (tasks.length == 0) {
-    taskId = 0;
-  } else {
-    taskId = tasks[tasks.length - 1].id;
+  const { value, error } = schema.validate(req.body, { convert: false });
+  //convert:false in order to prevent default converting input value to lowercase
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
   }
+  if (!error) {
+    if (tasks.length == 0) {
+      taskId = 0;
+    } else {
+      taskId = tasks[tasks.length - 1].id;
+    }
 
-  try {
-    newTask = new Task({
-      id: taskId+1,
-      name: req.body.name,
-      checked: false,
-    });
-    await newTask.save();
-  } catch (error) {
-    console.log(error);
+    try {
+      newTask = new Task({
+        id: taskId + 1,
+        name: req.body.name,
+        checked: false,
+      });
+      await newTask.save();
+    } catch (error) {
+      console.log(error);
+    }
+    res.status(200).send(newTask);
   }
-  res.status(200).send(newTask);
-}});
+});
 
 app.put("/tasks/:id", async (req, res) => {
   let tasks = await Task.find();
@@ -102,7 +104,7 @@ app.put("/tasks/:id", async (req, res) => {
       await task.save();
       res.status(200).send(task);
     } else {
-      res.status(404).send("Task Not Found"); 
+      res.status(404).send("Task Not Found");
     }
   } catch (error) {
     console.log(error);
