@@ -1,5 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const Joi = require("joi");
+const { number } = require("joi");
 const app = express();
 const port = 3000;
 
@@ -60,15 +62,15 @@ app.post("/tasks", async (req, res) => {
   let newTask;
   let tasks = await Task.find();
   let taskId;
-  if (!req.body.name) {
-    res.status(400).send("Task Name is Required.");
-    return;
-  }
-  if (req.body.name.length > 100) {
-    res.status(400).send("Task Name must be less than 100 characters.");
-    return;
-  }
-
+  const schema = Joi.object({
+    name:Joi.string().min(3).max(100).lowercase().alphanum(),
+  });
+  const {value,error} = schema.validate(req.body);
+ if (error) {
+  res.status(400).send(error.details[0].message);
+  return;
+ }
+ if (!error) {
   if (tasks.length == 0) {
     taskId = 0;
   } else {
@@ -77,7 +79,7 @@ app.post("/tasks", async (req, res) => {
 
   try {
     newTask = new Task({
-      id: taskId + 1,
+      id: taskId+1,
       name: req.body.name,
       checked: false,
     });
@@ -86,7 +88,7 @@ app.post("/tasks", async (req, res) => {
     console.log(error);
   }
   res.status(200).send(newTask);
-});
+}});
 
 app.put("/tasks/:id", async (req, res) => {
   let tasks = await Task.find();
