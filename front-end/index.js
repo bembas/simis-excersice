@@ -121,7 +121,6 @@ async function fetchTask() {
       },
     });
     const task = await response.json();
-    clearText("getId", "getName");
     return task;
   } catch (error) {
     console.log(error);
@@ -141,8 +140,12 @@ async function postTask() {
       body: JSON.stringify(newTask),
     });
     if (!response.ok) {
-      console.log(`Error status ${response.status}. ${response.statusText}`);
-      return;
+      const result = await response.text();
+      // console.log(`Error status ${response.status}. ${response.statusText}`);
+      console.log(result);
+      alert(result);
+      document.getElementById("myInput").value = "";
+      return result;
     } else {
       const task = await response.json();
       newElement(task);
@@ -172,16 +175,18 @@ async function updateTask(id) {
       },
       body: JSON.stringify(updatedTask),
     });
- 
+
     if (!response.ok) {
-        console.log(`Error status ${response.status}. ${response.statusText}. Initializing PUT request in non-existant Task.`);
-        return;
+     // console.log(`Error status ${response.status}. ${response.statusText}. Initializing PUT request in non-existant Task.`);
+     const result = await response.text();
+     console.log(result);
+     document.getElementById("myInput").value = "";
+     return;
     } else {
       const task = await response.json();
-
       console.log(task);
       return task;
-    }  
+    }
   } catch (error) {
     console.log(error);
   }
@@ -199,15 +204,17 @@ async function deleteTask(ID) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(deletedTask),
-    })
+    });
     if (!response.ok) {
-        console.log(`Error status ${response.status}. ${response.statusText}.`);
-        return;
+     const result = await response.text();
+     console.log(`${result}. ${Response.status}`);
+      // console.log(`Error status ${response.status}. ${response.statusText}.`);
+      return result;
     } else {
-    const task = await response.json();
-    console.log(task);
-    fetchTasks();
-    return;
+      const task = await response.json();
+      console.log(task);
+      fetchTasks();
+      return;
     }
   } catch (error) {
     console.log(error);
@@ -221,13 +228,7 @@ input.addEventListener("keypress", function (event) {
     document.getElementById("postBtn").click();
   }
 });
-//Block special characters. Front - End Input Validation.
-function blockSpecialChar(event){
-    if(!((event.keyCode >= 65) && (event.keyCode <= 90) || (event.keyCode >= 97) && (event.keyCode <= 122) || (event.keyCode >= 48) && (event.keyCode <= 57))){
-       event.returnValue = false;
-       alert("No Special Characters Allowed");
-       return;
-    }
-    
-    event.returnValue = true;
- }
+function clearText() {
+  document.getElementById("myInput").innerHTML = "";
+  return;
+}
