@@ -1,11 +1,13 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const Joi = require("joi");
 const { number } = require("joi");
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(cors());
 app.use(express.static("../front-end"));
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

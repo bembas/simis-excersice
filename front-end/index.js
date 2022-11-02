@@ -77,6 +77,7 @@ function createTaskList(input) {
 
 async function fetchTasks() {
   try {
+    console.log('tasks1');
     const response = await fetch("http://localhost:3000/tasks", {
       method: "GET",
       headers: {
@@ -84,6 +85,8 @@ async function fetchTasks() {
       },
     });
     const tasks = await response.json();
+    console.log('tasks');
+    console.log(tasks);
     tasks.sort((a, b) => a.id - b.id);
     if (response.status == 404) {
       return "error";
@@ -177,11 +180,11 @@ async function updateTask(id) {
     });
 
     if (!response.ok) {
-     // console.log(`Error status ${response.status}. ${response.statusText}. Initializing PUT request in non-existant Task.`);
-     const result = await response.text();
-     console.log(result);
-     document.getElementById("myInput").value = "";
-     return;
+      // console.log(`Error status ${response.status}. ${response.statusText}. Initializing PUT request in non-existant Task.`);
+      const result = await response.text();
+      console.log(result);
+      document.getElementById("myInput").value = "";
+      return;
     } else {
       const task = await response.json();
       console.log(task);
@@ -206,8 +209,8 @@ async function deleteTask(ID) {
       body: JSON.stringify(deletedTask),
     });
     if (!response.ok) {
-     const result = await response.text();
-     console.log(`${result}. ${Response.status}`);
+      const result = await response.text();
+      console.log(`${result}. ${Response.status}`);
       // console.log(`Error status ${response.status}. ${response.statusText}.`);
       return result;
     } else {
