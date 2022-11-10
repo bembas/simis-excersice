@@ -77,16 +77,13 @@ function createTaskList(input) {
 
 async function fetchTasks() {
   try {
-    console.log('tasks1');
-    const response = await fetch("http://localhost:3000/tasks", {
+    const response = await fetch(`http://localhost:3000/tasks`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
     const tasks = await response.json();
-    console.log('tasks');
-    console.log(tasks);
     tasks.sort((a, b) => a.id - b.id);
     if (response.status == 404) {
       return "error";

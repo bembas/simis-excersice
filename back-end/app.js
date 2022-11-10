@@ -1,10 +1,10 @@
 const express = require("express");
+const dotenv = require('dotenv').config();
 const mongoose = require("mongoose");
 const cors = require('cors')
 const Joi = require("joi");
-const { number } = require("joi");
 const app = express();
-const port = 3000;
+const port = process.env.PORT
 
 app.use(express.json());
 app.use(cors());
@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 const uri =
-  "mongodb+srv://errikos22:errikos2160@firstcluster.inftsar.mongodb.net/billyDatabase?retryWrites=true&w=majority";
+  `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@firstcluster.inftsar.mongodb.net/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 async function connect() {
   try {
     await mongoose.connect(uri).then(console.log("Connected on Mongo DB"));
@@ -65,7 +65,7 @@ app.post("/tasks", async (req, res) => {
   let tasks = await Task.find();
   let taskId;
   const schema = Joi.object({
-    name: Joi.string().min(3).max(100).lowercase().alphanum(),
+    name: Joi.string().min(3).max(100).trim().lowercase().pattern(new RegExp(/^\w+(\s+\w+)*$/))
   });
   const { value, error } = schema.validate(req.body, { convert: false });
   //convert:false in order to prevent default converting input value to lowercase
