@@ -13,7 +13,7 @@ app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });
 const uri =
-  `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@firstcluster.inftsar.mongodb.net/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
+  `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@firstcluster.inftsar.mongodb.net/billyDatabase?retryWrites=true&w=majority`;
 async function connect() {
   try {
     await mongoose.connect(uri).then(console.log("Connected on Mongo DB"));

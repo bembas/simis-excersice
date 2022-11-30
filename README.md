@@ -7,7 +7,8 @@ The front-end consists of a simple html/css/javascript app inside the front-end 
 The back-end is developed using the express package for creating the server and building of the APIs, and the mongoose package for database connection with mongoDB.
 
 To run the app:
-1. In your terminal go to "~/simis-excercise/back-end" using "cd" command .
-2. Run app.js using "node app.js" . Wait for "Connected on Mongo DB" , "Listening on port 3000" consoled messages.
-3. Open browser and type this url : "http://localhost:3000" .
+1. In  "~/simis-excercise/back-end" run npm install.
+2. Replace .env.example with a .env file containing your port, MongoDB username and password.
+3. Run app.js - wait for "Connected on Mongo DB" , "Listening on port {your port} " consoled messages.
+3. Open browser and type this url : "http://localhost:{your port}" .
 
