@@ -16,7 +16,7 @@ const uri =
   `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@firstcluster.inftsar.mongodb.net/billyDatabase?retryWrites=true&w=majority`;
 async function connect() {
   try {
-    await mongoose.connect(uri).then(console.log("Connected on Mongo DB"));
+    await mongoose.connect(uri).then(()=>console.log("Connected on Mongo DB"));
   } catch (error) {
     console.error(error);
   }
